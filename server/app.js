@@ -4,6 +4,8 @@ import config from "./config/config.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import bookRoutes from "./routes/book.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -14,19 +16,17 @@ app.use(cookieParser());
 
 // DB connection
 mongoose
-  .connect(config.mongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(config.mongoUri)
   .then(() => console.log("Connected to the database!"))
   .catch((err) => console.error("DB error:", err));
 
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to My Portfolio application." });
+  res.json({ message: "Welcome to Library App." });
 });
 
 // Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/books", bookRoutes);
-// app.use("/api/auth", authRoutes);
 
 export default app;

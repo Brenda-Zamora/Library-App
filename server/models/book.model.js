@@ -38,12 +38,12 @@ const bookSchema = new mongoose.Schema(
     },
 
     image: {
-      type: String, // puede ser una URL
+      type: String, // URL or path to the image
       default: "",
     },
   },
   {
-    timestamps: true, // para saber cuándo se creó o actualizó
+    timestamps: true, // automatically manage createdAt and updatedAt fields
   }
 );
 

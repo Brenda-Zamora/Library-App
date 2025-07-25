@@ -1,56 +1,66 @@
 import Book from "../models/book.model.js";
 
-// 🔹 Crear un nuevo libro
-export const createBook = async (req, res) => {
+// Add a new book
+export const addBook = async (req, res) => {
   try {
+    console.log("Adding book:", req.body);
     const book = await Book.create(req.body);
     res.status(201).json(book);
   } catch (err) {
+    console.error("Error:", err.message);
     res.status(400).json({ error: err.message });
   }
 };
 
-// 🔹 Obtener todos los libros
+// Get all books
 export const getBooks = async (req, res) => {
   try {
+    console.log("Fetching all books");
     const books = await Book.find();
     res.json(books);
   } catch (err) {
-    res.status(500).json({ error: "Error al obtener los libros" });
+    console.error("Error fetching books:", err.message);
+    res.status(500).json({ error: "Error fetching books" });
   }
 };
 
-// 🔹 Obtener un libro por ID
+// Get a book by ID
 export const getBookById = async (req, res) => {
   try {
+    console.log("Fetching book with ID:", req.params.id);
     const book = await Book.findById(req.params.id);
-    if (!book) return res.status(404).json({ error: "Libro no encontrado" });
+    if (!book) return res.status(404).json({ error: "Book not found" });
     res.json(book);
   } catch (err) {
-    res.status(500).json({ error: "Error al buscar el libro" });
+    console.error("Error fetching book:", err.message);
+    res.status(500).json({ error: "Error fetching book" });
   }
 };
 
-// 🔹 Actualizar un libro por ID
+// Update a book by ID
 export const updateBook = async (req, res) => {
   try {
+    console.log("Updating book with ID:", req.params.id);
     const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
-    if (!book) return res.status(404).json({ error: "Libro no encontrado" });
+    if (!book) return res.status(404).json({ error: "Book not found" });
     res.json(book);
   } catch (err) {
+    console.error("Error updating book:", err.message);
     res.status(400).json({ error: err.message });
   }
 };
 
-// 🔹 Eliminar un libro por ID
+// Delete a book by ID
 export const deleteBook = async (req, res) => {
   try {
+    console.log("Deleting book with ID:", req.params.id);
     const book = await Book.findByIdAndDelete(req.params.id);
-    if (!book) return res.status(404).json({ error: "Libro no encontrado" });
-    res.json({ message: "Libro eliminado con éxito" });
+    if (!book) return res.status(404).json({ error: "Book not found" });
+    res.json({ message: "Book deleted successfully" });
   } catch (err) {
-    res.status(500).json({ error: "Error al eliminar el libro" });
+    console.error("Error deleting book:", err.message);
+    res.status(500).json({ error: "Error deleting book" });
   }
 };
