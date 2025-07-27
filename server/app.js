@@ -8,6 +8,7 @@ import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import wishlistRoutes from "./routes/wishlist.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
+import orderRoutes from "./routes/order.routes.js";
 
 const app = express();
 
@@ -32,5 +33,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 export default app;

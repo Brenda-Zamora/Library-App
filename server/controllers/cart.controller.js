@@ -1,10 +1,27 @@
 import Cart from "../models/cart.model.js";
 
 export const getCart = async (req, res) => {
-  const cart = await Cart.findOne({ user: req.user._id }).populate(
-    "items.book"
-  );
-  res.json(cart);
+  try {
+    const cart = await Cart.findOne({ user: req.user._id }).populate({
+      path: "items.book",
+      select: "title price image",
+    });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    const simplifiedItems = cart.items.map((item) => ({
+      title: item.book.title,
+      price: item.book.price,
+      image: item.book.image,
+      quantity: item.quantity,
+    }));
+
+    res.json({ items: simplifiedItems });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
 };
 
 export const addToCart = async (req, res) => {

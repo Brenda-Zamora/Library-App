@@ -1,20 +1,35 @@
 import Wishlist from "../models/wishlist.model.js";
+import mongoose from "mongoose";
 
-// Create or update wishlist
 export const addToWishlist = async (req, res) => {
   const { bookId } = req.body;
-  try {
-    let wishlist = await Wishlist.findOne({ user: req.user._id });
-    if (!wishlist) {
-      wishlist = await Wishlist.create({ user: req.user._id, books: [bookId] });
-    } else if (!wishlist.books.includes(bookId)) {
-      wishlist.books.push(bookId);
+  console.log("Adding to wishlist:", bookId);
+
+  if (!mongoose.Types.ObjectId.isValid(bookId)) {
+    return res.status(400).json({ error: "Invalid book ID" });
+  }
+
+  const bookObjectId = new mongoose.Types.ObjectId(bookId);
+
+  let wishlist = await Wishlist.findOne({ user: req.user._id });
+
+  if (!wishlist) {
+    wishlist = await Wishlist.create({
+      user: req.user._id,
+      books: [bookObjectId],
+    });
+  } else {
+    wishlist.books = wishlist.books.filter((id) => id); // limpiar nulls si hay
+    const alreadyInWishlist = wishlist.books.some((id) =>
+      id.equals(bookObjectId)
+    );
+    if (!alreadyInWishlist) {
+      wishlist.books.push(bookObjectId);
       await wishlist.save();
     }
-    res.json(wishlist);
-  } catch (err) {
-    res.status(500).json({ error: "Error adding book to wishlist" });
   }
+
+  res.json(wishlist);
 };
 
 export const getWishlist = async (req, res) => {

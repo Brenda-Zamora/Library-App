@@ -26,22 +26,6 @@ export const getOrderById = async (req, res) => {
   res.json(order);
 };
 
-//
-export const deleteOrder = async (req, res) => {
-  const order = await Order.findOneAndDelete({
-    _id: req.params.id,
-    user: req.user._id,
-  });
-  if (!order) return res.status(404).json({ error: "Order not found" });
-  res.json({ message: "Order deleted successfully" });
-};
-
-// This function retrieves all orders, just for admin purposes
-export const getAllOrders = async (req, res) => {
-  const orders = await Order.find().populate("user books.book");
-  res.json(orders);
-};
-
 // Cancel an order
 export const cancelOrder = async (req, res) => {
   const order = await Order.findOne({
@@ -55,4 +39,10 @@ export const cancelOrder = async (req, res) => {
   order.status = "Cancelled";
   await order.save();
   res.json({ message: "Order cancelled successfully" });
+};
+
+// This function retrieves all orders, just for admin purposes
+export const getAllOrders = async (req, res) => {
+  const orders = await Order.find().populate("user books.book");
+  res.json(orders);
 };
