@@ -2,12 +2,12 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Spinner from "./Spinner";
 
-const AdminRoute = ({ children }) => {
+const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) {
     return <Spinner />;
   }
-  return user?.role === "admin" ? children : <Navigate to="/" replace />;
+  return user ? children : <Navigate to="/signin" replace />;
 };
 
-export default AdminRoute;
+export default PrivateRoute;

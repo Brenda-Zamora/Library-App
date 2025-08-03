@@ -10,7 +10,7 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-// Get user by ID (admin or the same user) ------------------------------------------------------------------CHECK
+// Get user by ID (admin or the same user)
 // This can be extended to allow users to view their own profile without admin rights
 export const getUserById = async (req, res) => {
   try {
